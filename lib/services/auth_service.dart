@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:aws/services/auth_credentials.dart';
+
 enum AuthFlowStatus { login, signUp, verification, session }
 
 class AuthState {
@@ -18,6 +20,21 @@ class AuthService {
 
   void showLogin() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+    authStateController.add(state);
+  }
+
+  void loginWithCredentials(AuthCredentials credentials) {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+    authStateController.add(state);
+  }
+
+  void signUpWithCredentials(SignUpCredentials credentials) {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.verification);
+    authStateController.add(state);
+  }
+
+  void verifyCode(String verificationCode) {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.session);
     authStateController.add(state);
   }
 }

@@ -1,6 +1,12 @@
+import 'package:aws/services/auth_credentials.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
+  final ValueChanged<LoginCredentials>? didProvideCredentials;
+  final VoidCallback? shouldShowSignUp;
+
+  const LoginScreen({ Key? key,  this.shouldShowSignUp, this.didProvideCredentials }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _LoginScreenState();
 }
@@ -22,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               alignment: Alignment.bottomCenter,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: widget.shouldShowSignUp,
                   child: const Text('Don\'t have an account? Sign up.')),
             )
           ])),
@@ -68,5 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     print('username: $username');
     print('password: $password');
+
+    final credentials = LoginCredentials(username: username, password: password);
+    widget.didProvideCredentials!(credentials);
+
   }
 }
