@@ -1,3 +1,4 @@
+import 'package:aws/helpers/camera_helper.dart';
 import 'package:aws/screens/login_screen.dart';
 import 'package:aws/screens/sign_up_screen.dart';
 import 'package:aws/screens/verification_screen.dart';
@@ -5,11 +6,13 @@ import 'package:aws/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 // 1
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _MyAppState();
 }
@@ -26,6 +29,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Photo Gallery App',
       theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
       home: StreamBuilder<AuthState>(
@@ -47,6 +51,10 @@ class _MyAppState extends State<MyApp> {
                   if(snapshot.data?.authFlowStatus == AuthFlowStatus.verification) 
                     MaterialPage(child: VerificationScreen (
                       didProvideVerificationCode: _authService.verifyCode,
+                    )),
+                  if(snapshot.data?.authFlowStatus == AuthFlowStatus.session)
+                    MaterialPage(child: CameraHelper(
+                      shouldLogOut: _authService.logOut,
                     ))
                 ],
               onPopPage: (route, result) => route.didPop(result),
